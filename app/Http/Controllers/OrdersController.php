@@ -12,7 +12,7 @@ session_start();
 class OrdersController extends Controller
 {
     public function index () {
-        return view('admin.new-order');
+        return view('admin.add-order');
     }
 
     public function allOrders () {
@@ -52,10 +52,75 @@ class OrdersController extends Controller
 
     }
     public function delete_order ($order_id) {
+
         DB::table('orders')
         ->where('order_id',$order_id)
         ->delete();
         Session::put('message','order deleted succefully');
          return Redirect::to('/all-orders');
         }
-}
+
+        public function search_client (Request $request){
+            {
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                if($request->ajax()){
+                    $clients=DB::table('client')
+                    ->where('client_name','LIKE','%'.$request->client."%")
+                    ->get();
+                     if($clients){
+                         foreach ($clients as $client) {
+                              $output.= '<li class="clients"><a href="#">'.$client->client_name.'</a></li>';
+                             }
+                            echo $output;
+                            }
+                            else {
+                                $output.='<li><a href="#">no result founds</a></li>';
+                                echo $output;
+                            }
+                        }
+                    }
+                }
+                public function search_item (Request $request){
+                    {
+                        $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                        if($request->ajax()){
+                            $items=DB::table('items')
+                            ->where('item_name','LIKE','%'.$request->item."%")
+                            ->get();
+                             if($items){
+                                 foreach ($items as $item) {
+                                      $output.= '<li class="items"><a href="#">'.$item->item_name.'</a></li>';
+                                     }
+                                    echo $output;
+                                    }
+                                    else {
+                                        $output.='<li><a href="#">no result founds</a></li>';
+                                        echo $output;
+                                    }
+                                }
+                            }
+                        }
+
+                        public function store (Request $request){
+
+
+                            //insert client info and date and order number
+                            $client_id = DB::table('client')
+                            ->where('client_name','=',$request->client_name)
+                            ->get();
+                            $current_client;
+                            foreach ($client_id as $id) {
+                               $current_client = $id->client_id;
+                            }
+                           
+                            $data = array();
+                            $data['order_date'] = $request->order_date;
+                            $data['order_no'] = $request->order_no;
+                            $data['client_id'] =  $current_client;
+                            DB::table('orders')->insert($data);
+                           
+                            Session::put('message','order added succefully');
+                            return Redirect::to('/add-order');
+                        }
+         
+            }

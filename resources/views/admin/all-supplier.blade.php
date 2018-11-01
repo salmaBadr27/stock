@@ -12,21 +12,11 @@
             <br>
         </div>
         <div class="box-content">
-                <p class="alert-success">
-                        <?php
-                        $message=Session::get('message');
-                        if($message){
-                            echo $message;
-                            Session::put('message',null);
-                        }
-                        ?>
-                        </p>
             <table class="table table-striped table-bordered bootstrap-datatable datatable">
               <thead>
                   <tr>
                       <th>Supplier id</th>
                       <th> Supplier Name</th>
-                      <th> Description</th>
                       <th>Actions</th>
                   </tr>
               </thead>   
@@ -35,7 +25,6 @@
                 <tr>
                     <td>{{$supplier->supplier_id}}</td>
                     <td class="center">{{$supplier->supplier_name}}</td>
-                    <td class="center">{{$supplier->supplier_description}}</td>
                     <td class="center">
                          <a class="btn btn-primary" href="{{URL::to('/edit-supplier/'.$supplier->supplier_id)}}">
                             <i class="fa fa-edit"></i> 

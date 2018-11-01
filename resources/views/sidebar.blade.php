@@ -48,10 +48,10 @@
                         <a href="#"><i class="fa fa-sitemap fa-2x"></i>Categories<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">Add Category</a>
+                                <a href="{{URL::to('/add-category')}}">Add Category</a>
                             </li>
                             <li>
-                                <a href="#">All Categories</a>
+                                <a href="{{URL::to('/all-category')}}">All Categories</a>
                             </li>
                            
                                 </ul>

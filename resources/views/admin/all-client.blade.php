@@ -11,22 +11,11 @@
             </a>
         </div>
         <br>
-        <div class="box-content">
-                <p>
-                        <?php
-                        $message=Session::get('message');
-                        if($message){
-                            echo $message;
-                            Session::put('message',null);
-                        }
-                        ?>
-                        </p>
             <table class="table table-striped table-bordered bootstrap-datatable datatable">
               <thead>
                   <tr>
                       <th>Client id</th>
                       <th> Client Name</th>
-                      <th> Description</th>
                       <th>Actions</th>
                   </tr>
               </thead>   
@@ -35,7 +24,6 @@
                 <tr>
                     <td>{{$client->client_id}}</td>
                     <td class="center">{{$client->client_name}}</td>
-                    <td class="center">{{$client->client_description}}</td>
                     <td class="center">
                          <a class="btn btn-primary" href="{{URL::to('/edit-client/'.$client->client_id)}}">
                             <i class="fa fa-edit"></i> 
@@ -46,7 +34,7 @@
                         <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
                             <i class="fa fa-remove"></i>
                           </button>
-                          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                          <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
                                   <div class="modal-content">
                                       <div class="modal-header">

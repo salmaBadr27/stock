@@ -27,7 +27,7 @@
                   <div class="form-group">
 								<label class="control-label" for="selectError3">item category</label>
 								<div class="controls">
-                 <select name="category_id">
+                 <select name="category_id" class = "form-control">
                  <option>select category</option>
                        <?php 
                     $all_category = DB::table('categories')
@@ -40,7 +40,7 @@
                               </div>
                   <div class="form-group">
 							  <label class="control-label" for="fileInput">image</label>
-							  <div class="controls">
+							  <div class="form-control">
 								<input class="input-file uniform_on" name="item_image" id ="fileInput" type="file">
 							  </div>
 							</div>   
@@ -50,6 +50,19 @@
                     <input type="text" class="form-control" name="item_price" required>
                   </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label" for="date01">item quantity</label>
+                    <div class="controls">
+                      <input type="text" class="form-control" name="item_quantity" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                  <select name="item_unit" class = "form-control" required>
+                      <option></option>
+                      <option>kg</option>
+                      <option>كرتونه</option>
+                   </select>
+                  </div>
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary">Add item</button>
                   <button type="reset" class="btn">Cancel</button>

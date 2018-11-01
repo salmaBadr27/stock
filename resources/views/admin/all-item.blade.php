@@ -12,38 +12,19 @@
             <br>
         </div>
         <div class="box-content">
-                <p class="alert-success">
-                        <?php
-                        $message=Session::get('message');
-                        if($message){
-                            echo $message;
-                            Session::put('message',null);
-                        }
-                        ?>
-                        </p>
             <table class="table table-striped table-bordered bootstrap-datatable datatable">
               <thead>
                   <tr>
-                      <th>items id</th>
                       <th> Name</th>
-                      <th> items Category</th>
                       <th>  image</th>
-                      <th> Price</th>
-                      <th> Quantity</th>
-                      <th> Unit</th>
                       <th>Actions</th>
                   </tr>
               </thead>   
               @foreach($all_items as $item) <!-- loop through allcategories d=fetched from database and put them in table-->
               <tbody>
                 <tr>
-                    <td>{{$item->item_id}}</td>
                     <td class="center">{{$item->item_name}}</td>
-                    <td class="center">{{$item->category_name}}</td>
                     <td><img src= "{{URL::to($item->item_image)}}" style ="height:80px;width:80px"></td>
-                    <td class="center">{{$item->item_price}}</td>
-                    <td class="center">{{$item->item_initial_qty}}</td>
-                    <td class="center">{{$item->item_unit}}</td>
                     <td class="center">
                          <a class="btn btn-primary" href="{{URL::to('/edit-item/'.$item->item_id)}}">
                             <i class="fa fa-edit"></i> 

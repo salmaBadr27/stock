@@ -13,7 +13,7 @@ class AdminController extends Controller
 {
     public function index(){
          $this->AdminAuthCheck();  
-        return view('admin_layout');
+        return view('admin.dashboard');
        }
        public function loginAction (Request $request){
    
