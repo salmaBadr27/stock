@@ -71,7 +71,8 @@ public function all_suppliers (){
 
         }
 
-        public function delete_supplier ($supplier_id) {
+        public function delete_supplier (Request $request) {
+            $supplier_id = $request->supplier_id;
             DB::table('supplier')
             ->where('supplier_id',$supplier_id)
             ->delete();

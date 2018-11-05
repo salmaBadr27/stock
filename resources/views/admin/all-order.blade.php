@@ -11,16 +11,7 @@
             </a>
             <br>
         </div>
-        <div class="box-content">
-                <p class="alert-success">
-                        <?php
-                        $message=Session::get('message');
-                        if($message){
-                            echo $message;
-                            Session::put('message',null);
-                        }
-                        ?>
-                        </p>
+                        @if(count($all_orders)>0)
             <table class="table table-striped table-bordered bootstrap-datatable datatable">
               <thead>
                   <tr>
@@ -71,7 +62,13 @@
                
               </tbody>
               @endforeach
-          </table>            
+          </table>  
+          @else 
+          <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon edit"></i><span class="break"></span>There is no  Orders found  </h2>
+                </div> 
+                @endif                
         </div>
     </div><!--/span-->
 @endsection

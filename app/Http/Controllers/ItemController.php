@@ -53,20 +53,25 @@ class ItemController extends Controller
             ->with('all_items',$all_items);
             return view ('admin_layout')->with('admin.all-item',$manage_items);
               }
-              public function delete_item ($item_id) {
+
+              public function delete_item (Request $request) {
+                $item_id = $request->item_id;
                 DB::table('items')
                 ->where('item_id',$item_id)
                 ->delete();
                 Session::put('message','item deleted succefully');
                  return Redirect::to('/all-item');
                 }
-                public function delete_item_by_cat_id ($category_id) {
+               
+                public function delete_item_by_cat_id (Request $request) {
+                    $category_id = $request->category_id;
                     DB::table('items')
                     ->where('category_id',$category_id)
                     ->delete();
                     Session::put('message','item deleted succefully');
                      return Redirect::to('/all-item');
                     }
+
                 public function edit_item ($item_id) {
       
                     $single_item= DB::table('items')
@@ -81,7 +86,6 @@ class ItemController extends Controller
                     }
 
                     public function move_item ($category_id) {
-      
                         $single_item = DB::table('items')
                         ->join('categories','items.category_id','=','categories.category_id')
                         ->select('items.*','categories.category_name')
@@ -92,6 +96,7 @@ class ItemController extends Controller
                         return view ('admin_layout') 
                         ->with('admin.move-item',$edited_item);
                         }
+
                     public function update_item(Request $request,$item_id)
                     {
                          $data=array();
@@ -126,7 +131,6 @@ class ItemController extends Controller
                     }
                     public function update_item_by_cat (Request $request,$category_id)
                     {
-                        
                      $data=array();
                      $data['category_id']=$request->category_id;
                     DB::table('items')

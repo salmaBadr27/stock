@@ -6,16 +6,6 @@
 			<h2><i class="halflings-icon edit"></i><span class="break"></span>update Client</h2>
         </div>
         <hr>
-		<p class="alert-success">
-			<?php
-			$message=Session::get('message');
-			if($message)
-			{
-				echo $message;
-				Session::put('message',null);
-			}
-           ?>
-		</p>
 			<form class="form-horizontal" action="{{ url('/update-client',$single_client->client_id)}}" method="post" 
 			enctype="multipart/form-data">
 				{{ csrf_field() }}

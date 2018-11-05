@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use  App\Http\Requests;
 use DB;
 use Session;
-session_start();
+ session_start();
 
 class ClientController extends Controller
 {
@@ -71,7 +71,8 @@ class ClientController extends Controller
 
             }
 
-            public function delete_client ($client_id) {
+            public function delete_client (Request $request) {
+                $client_id = $request->client_id;
                 DB::table('client')
                 ->where('client_id',$client_id)
                 ->delete();

@@ -5,16 +5,6 @@
 		<div class="box-header" data-original-title>
 			<h2><i class="halflings-icon edit"></i><span class="break"></span>update category</h2>
 		</div>
-		<p class="alert-success">
-			<?php
-			$message=Session::get('message');
-			if($message)
-			{
-				echo $message;
-				Session::put('message',null);
-			}
-           ?>
-		</p>
 			<form class="form-horizontal" action="{{ url('/update-category',$single_category->category_id)}}" method="post" 
 			enctype="multipart/form-data">
 				{{ csrf_field() }}
@@ -29,7 +19,7 @@
 					<label class="form-label" for="selectError3">Parent category</label>
 					<div class="forms">
 					  <select id="selectError3" name="category_id" class="form-control"> 
-                         <option></option>
+								<option></option>
                        <?php
                            $all_published_category=DB::table('categories')
                                                   ->get();

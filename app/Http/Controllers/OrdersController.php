@@ -62,7 +62,7 @@ class OrdersController extends Controller
 
         public function search_client (Request $request){
             {
-                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                // $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
                 if($request->ajax()){
                     $clients=DB::table('client')
                     ->where('client_name','LIKE','%'.$request->client."%")

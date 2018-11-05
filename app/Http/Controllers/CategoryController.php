@@ -65,7 +65,8 @@ class CategoryController extends Controller
 
 
         }
-        public function delete_category ($category_id) {
+        public function delete_category (Request $request) {
+           $category_id = $request->category_id;
            $parents = DB::table('categories')
             ->where('parent_category',$category_id)
             ->get();

@@ -5,16 +5,6 @@
 		<div class="box-header" data-original-title>
 			<h2><i class="halflings-icon edit"></i><span class="break"></span>update item</h2>
 		</div>
-		<p class="alert-success">
-			<?php
-			$message=Session::get('message');
-			if($message)
-			{
-				echo $message;
-				Session::put('message',null);
-			}
-           ?>
-		</p>
 			<form class="form-horizontal" action="{{ url('/update-item',$single_item->item_id)}}" method="post" 
 			enctype="multipart/form-data">
 				{{ csrf_field() }}
@@ -34,7 +24,6 @@
                                                   ->get();
                        ?>
                    @foreach($all_published_category as $category){?>  
-
 					<option value="{{ $category->category_id}}">
 					 {{$category->category_name}} 				
 					</option>	

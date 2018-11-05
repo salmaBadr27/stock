@@ -22,12 +22,13 @@ Route::get('/logout', 'AdminController@logout');
 Route::get('/add-item', 'ItemController@index');
 Route::post('/save-item', 'ItemController@store');
 Route::get('/all-item', 'ItemController@all_items');
-Route::get('/delete-item/{item_id}', 'ItemController@delete_item');
+Route::get('/delete-item', 'ItemController@delete_item');
 Route::get('/edit-item/{item_id}', 'ItemController@edit_item');
 Route::post('/update-item/{item_id}', 'ItemController@update_item');
 Route::get('/view-item/{item_id}', 'ItemController@show_item');
 Route::get('/view-item-by-cat/{category_id}', 'ItemController@show_item_by_category');
 Route::get('/move-item-by-cat/{category_id}', 'ItemController@move_item');
+Route::get('/delete-item-by-cat', 'ItemController@delete_item_by_cat_id');
 Route::post('/update-item-by-cat/{category_id}', 'ItemController@update_item_by_cat');
 
 
@@ -38,7 +39,7 @@ Route::get('/all-client', 'ClientController@all_clients');
 Route::get('/edit-client/{client_id}', 'ClientController@edit_client');
 Route::post('/update-client/{client_id}', 'ClientController@update_client');
 Route::get('/view-client/{client_id}', 'ClientController@show_client');
-Route::get('/delete-client/{client_id}', 'ClientController@delete_client');
+Route::get('/delete-client', 'ClientController@delete_client');
 
 //supplier routers
 Route::get('/add-supplier', 'SupplierController@index');
@@ -47,7 +48,7 @@ Route::get('/all-supplier', 'supplierController@all_suppliers');
 Route::get('/edit-supplier/{supplier_id}', 'SupplierController@edit_supplier');
 Route::post('/update-supplier/{supplier_id}', 'SupplierController@update_supplier');
 Route::get('/view-supplier/{supplier_id}', 'SupplierController@show_supplier');
-Route::get('/delete-supplier/{supplier_id}', 'SupplierController@delete_supplier');
+Route::get('/delete-supplier', 'SupplierController@delete_supplier');
 
 //orders routes
 Route::get('/all-orders', 'OrdersController@allOrders');
@@ -64,10 +65,9 @@ Route::get('/add-category', 'CategoryController@index');
 Route::post('/save-category', 'CategoryController@store');
 Route::get('/view-category/{category_id}', 'CategoryController@show_category');
 Route::get('/view-sub-category/{category_id}', 'CategoryController@show_sub_category');
-Route::get('/delete-category/{category_id}', 'CategoryController@delete_category');
 Route::get('/search', 'CategoryController@search_category');
 Route::get('/edit-category/{category_id}', 'CategoryController@edit_category');
 Route::post('/update-category/{category_id}', 'CategoryController@update_category');
-Route::get('/delete-category/{category_id}', 'CategoryController@delete_category');
+Route::get('/delete-category', 'CategoryController@delete_category');
 
 
