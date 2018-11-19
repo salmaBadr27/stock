@@ -90,6 +90,33 @@ class CategoryController extends Controller
             return redirect()->back()->with('success', $success_msg);
             }
         }
+        public function delete_sub_category (Request $request) {
+            $sub_id = $request->subcat_id;
+            $parents = DB::table('categories')
+             ->where('parent_category',$sub_id)
+             ->get();
+
+             if(count($parents)>0){
+             $parent_msg = 'there is sub categories in this category move them first';
+             return redirect()->back()->with('alert', $parent_msg );
+         }
+
+         $items = DB::table('items')
+         ->where('category_id', $sub_id )
+         ->get();
+ 
+        if(count($items) > 0) {
+         $item_msg ='there is items in this category move them first';
+         return redirect()->back()->with('danger', $item_msg);
+      }
+             else{
+             DB::table('categories')
+             ->where('category_id',$sub_id )
+             ->delete();
+             $success_msg ='sub category deleted succefully';
+             return redirect()->back()->with('success', $success_msg);
+             }
+         }
           
             public function edit_category ($category_id) {
       
@@ -138,14 +165,42 @@ class CategoryController extends Controller
 
                     $single_category= DB::table('categories')
                      ->join('categories as cat', 'categories.category_id', '=', 'cat.parent_category')
-                     ->select('cat.category_name as sub_category','cat.category_image as image','categories.category_description')
+                     ->select('cat.category_name as sub_category','cat.category_image as image','categories.category_description','categories.category_id','cat.parent_category as parent')
                      ->where('cat.parent_category',$category_id)
                      ->get();
-                    $viewed_category = view('admin.show-category')
-                    ->with('single_category', $single_category);
+                     $sub_id =  DB::table('categories')
+                     ->select('category_id')
+                     ->where('parent_category', $single_category[0]->category_id)
+                     ->get();
+                    
+                    $viewed_category = view('admin.show-sub-category')
+                    ->with(['single_category'=> $single_category,
+                   'sub_id'=> $sub_id ]);
                     return view ('admin_layout') 
-                    ->with('admin.show-category',$viewed_category);
+                    ->with('admin.show-sub-category',$viewed_category);
         
         
                 }
+                public function move_sub($category_id) {
+                    $single_category = DB::table('categories')
+                    ->where('category_id',$category_id)
+                    ->first();
+                    $edited_sub = view('admin.move-sub')
+                    ->with('single_category', $single_category );
+                    return view ('admin_layout') 
+                    ->with('admin.move-sub',$edited_sub);
+                    }
+
+                    public function update_sub_by_parent (Request $request,$parent_id)
+                    {
+                     $data=array();
+                     $data['parent_category']=$request->parent_id;
+                    DB::table('categories')
+                    ->where('parent_category',$parent_id)
+                    ->update($data);
+                    Session::put('message','sub category moved successfully!!');
+                        return Redirect::to('/all-category');
+                    }
+
+
 }

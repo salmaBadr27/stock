@@ -16,8 +16,9 @@
    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    <!-- form repeater-->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
+   <link href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+   <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
 </head>
 <body>
     <div id="wrapper">
@@ -46,6 +47,8 @@
     <script src="{{ URL::to('backend/js/morris/raphael-2.1.0.min.js')}}"></script>
     <script src="{{ URL::to('backend/js/morris/morris.js')}}"></script>
       <!-- CUSTOM SCRIPTS -->
-    <script src="{{ URL::to('backend/js/custom.js')}}"></script>
+      <script src="{{ URL::to('backend/js/custom.js')}}"></script>
+      <script src="{{ URL::to('backend/js/jquery-ui.min.js')}}"></script>
+      <script src="{{ URL::to('backend/js/jquery-ui.js')}}"></script>
 </body>
 </html>

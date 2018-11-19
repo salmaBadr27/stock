@@ -168,6 +168,22 @@ class ItemController extends Controller
 
 
                     }
-
+                    public function search_item(Request $request)
+                    {
+                        if($request->ajax())
+                        {
+                             $data = array();
+                              $items = DB::table('items')
+                              ->where('item_name', 'LIKE', $request->item_name."%")
+                              ->get();
+                               if($items){
+                                   foreach($items as $item)
+                                   {
+                                        array_push($data,['item'=>$item->item_name,'id'=>$item->item_id]);
+                                       }
+                                   }
+                               }
+                               return json_encode($data);
+                           }
               
 }

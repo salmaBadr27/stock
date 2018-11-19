@@ -30,6 +30,7 @@ Route::get('/view-item-by-cat/{category_id}', 'ItemController@show_item_by_categ
 Route::get('/move-item-by-cat/{category_id}', 'ItemController@move_item');
 Route::get('/delete-item-by-cat', 'ItemController@delete_item_by_cat_id');
 Route::post('/update-item-by-cat/{category_id}', 'ItemController@update_item_by_cat');
+Route::get('/search-item', 'ItemController@search_item');
 
 
 //clients routers
@@ -40,6 +41,7 @@ Route::get('/edit-client/{client_id}', 'ClientController@edit_client');
 Route::post('/update-client/{client_id}', 'ClientController@update_client');
 Route::get('/view-client/{client_id}', 'ClientController@show_client');
 Route::get('/delete-client', 'ClientController@delete_client');
+Route::get('/search-client', 'ClientController@search_client');
 
 //supplier routers
 Route::get('/add-supplier', 'SupplierController@index');
@@ -55,8 +57,9 @@ Route::get('/all-orders', 'OrdersController@allOrders');
 Route::get('/add-order', 'OrdersController@index');
 Route::post('/save-order', 'OrdersController@store');
 Route::get('/view-order/{order_id}', 'OrdersController@show_order');
-Route::get('/delete-order/{order_id}', 'OrdersController@delete_order');
+Route::get('/delete-order', 'OrdersController@delete_order');
 Route::get('/search', 'OrdersController@search_client');
+Route::get('/edit-order/{order_id}', 'OrdersController@edit_order');
 
 
 //category routes
@@ -68,6 +71,8 @@ Route::get('/view-sub-category/{category_id}', 'CategoryController@show_sub_cate
 Route::get('/search', 'CategoryController@search_category');
 Route::get('/edit-category/{category_id}', 'CategoryController@edit_category');
 Route::post('/update-category/{category_id}', 'CategoryController@update_category');
+Route::post('/update-sub-by-cat/{category_id}', 'CategoryController@update_sub_by_parent');
 Route::get('/delete-category', 'CategoryController@delete_category');
-
+Route::get('/delete-sub-category', 'CategoryController@delete_sub_category');
+Route::get('/move-sub-by-cat/{category_id}', 'CategoryController@move_sub');
 

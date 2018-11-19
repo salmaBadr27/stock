@@ -79,5 +79,21 @@ class ClientController extends Controller
                 Session::put('message','client deleted succefully');
                  return Redirect::to('/all-client');
                 }
-
-}
+                 public function search_client(Request $request)
+                 {
+                     if($request->ajax())
+                     {
+                          $data = array();
+                           $clients = DB::table('client')
+                           ->where('client_name', 'LIKE', $request->client_name."%")
+                           ->get();
+                            if($clients){
+                                foreach($clients as $client)
+                                {
+                                     array_push($data,$client->client_name);
+                                    }
+                                }
+                            }
+                            return json_encode($data);
+                        }
+                    }

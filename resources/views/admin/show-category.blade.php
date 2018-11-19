@@ -10,6 +10,7 @@
                             <td class="description">Name</td>
                             <td class="image">Image</td>
                             <td class="image">Description</td>
+                            <td class="quantity"> Action</td> 
 						</tr>
 					</thead>
 					<tbody>
@@ -24,6 +25,7 @@
                             <td class="cart_product">
                                     <h4>{{$sub->category_description}}</h4>
                             </td>
+                        
                         </tr>
                         @endforeach
                     </tbody>
@@ -37,5 +39,6 @@
                   @endif
 			</div>
 		</div>
-	</section>
+    </section>
+
 @endsection
