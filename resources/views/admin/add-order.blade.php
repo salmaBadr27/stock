@@ -25,7 +25,7 @@
                                 <th>Order number</th>
                             </tr>
                           <tr> 
-                                 <td><input type="search" name="client_name" id="client_name"  class="form-control" required/></td>  
+                                 <td><input type="search" name="client_name" id="client" data-type="clientname"  class="form-control autocomplete_client" required/></td>  
                                  <td><input type="text" id="date" name="order_date" class="form-control"/></td>  
                                  <td><input type="number" name="order_no" class="form-control"/></td>  
                           </tr>  
@@ -34,17 +34,18 @@
                         <table class="table table-bordered" id="autocomplete_table">
                                 <thead>
                                         <th>#</th>
-                                        <th>item</th>
                                         <th>code</th>
+
+                                        <th>item</th>
                                         <th>Quantity</th>
                                         <th>Unit</th>
                                     </thead>
                             <tbody>
                              <tr id="row_1">  
-                                    <input type="hidden"  id="itemid_1" value="" />
+                                    <input type="hidden" name ="id[]" id="itemid_1" value="" />
                                     <th id="delete_1" class="delete_row"><img src="../../../minus.png" style="width:25px;height:25px"/></th>
-                                    <td><input type="text" name="item[]" id="it_1" data-type="itemname" class="form-control autocomplete_txt" valu required/></td>  
-                                    <td><input type="text" name="code[]" id="code_1" data-type="code" class="form-control autocomplete_txt" required/></td>  
+                                    <td><input type="text" name="code[]" id="code_1" data-type="code" class="form-control autocomplete_txt" value="" required/></td>  
+                                    <td><input type="text" name="item[]" id="it_1" data-type="itemname" class="form-control autocomplete_txt"   value="" required/></td>  
                                     <td><input type="number" name="quantity[]" id="qty_1" data-type="qty" class="form-control autocomplete_txt" required/></td>  
                                     <td>  
                                         <select name="unit[]"  id="unit_1" class ="form-control autocomplete_txt" data-type="unitname" required>
@@ -79,6 +80,8 @@
             
             // date 
              $('#date').val(today);
+             $('#client').val('cash');
+
 
              //remove all rows 
            $('#RemoveAll').click(function() {
@@ -96,11 +99,11 @@
        tableBody = $('#autocomplete_table');
        function formHtml(){
         html ='<tr id="row_'+rowCount+'">';
-        html +='<input type="hidden"  id="itemid_'+rowCount+'" value=""/>';
+        html +='<input type="hidden" name ="id[]" id="itemid_'+rowCount+'" value=""/>';
         html +='<th id="delete_'+rowCount+'" class="delete_row"><img src="../../../minus.png" style="width:25px;height:25px"/></th>';  
-        html +='<td><input type="text" name="item[]" id="it_'+rowCount+'" data-type="itemname" class="form-control autocomplete_txt"   required/></td>';
         html +='<td><input type="text" name="code[]" id="code_'+rowCount+'" data-type="code" class="form-control autocomplete_txt"   required/></td>';
-        
+        html +='<td><input type="text" name="item[]" id="it_'+rowCount+'" data-type="itemname" class="form-control autocomplete_txt"   required/></td>';
+
         html += '<td><input type="number" name="quantity[]" id="qty_'+rowCount+'" data-type="qty" class="form-control autocomplete_txt" required/></td>';  
         html += '<td>'; 
         html +=  '<select name="unit[]"  id="unit_'+rowCount+'" class ="form-control autocomplete_txt" data-type="unitname" required>';
@@ -114,91 +117,6 @@
         rowCount++;
         return html;
        }
-
-       function getFieldNo(type){
-        var fieldNo;
-        switch(type) {
-            case 'itemname':
-            fieldNo = 0;
-            break;
-            case 'code':
-            fieldNo = 1;
-            break;
-            case 'qty' :
-            fieldNo = 2;
-            break;
-            case 'unitname' :
-            fieldNo = 3;
-            break;
-            default:
-            break;
-        }
-       return fieldNo;
-       }
-
-
-       function handleAutoComplete() {
-       var fieldNo,type,currentEle;
-       type = $(this).data('type');
-       fieldNo = getFieldNo(type);
-     
-       currentEle = $(this);
-      currentEle.autocomplete({
-       source :function(request,response){
-            $.ajax({  
-                       url : '{{URL::to('/search-item')}}',
-                       method:"GET",  
-                       dataType:'json',
-                       data:{
-                           name:request.term,
-                           fieldNo:fieldNo
-                       },
-                       success:function(res)  
-                       {  
-                          var itemsList;
-
-                          itemsList = [{
-                          label:"there is no matching results founds for" +request.term,
-                          value:''
-                          }];
-
-                           if(res.length) {
-                            itemsList = $.map(res,function(name){
-                            //   console.log('name',name);
-                                //  var arr = name[0].split("|");
-                                //  console.log('arr',name[1]);
-                                
-                                            //   for( var i=1;i<rowCount;i++){
-                                            //     var id = $('#it_'+i).val(res);
-                                            //     console.log(id);
-                                            //     // $('#itemid_'+i).val(2);
-                                            //         }
-
-                            return {
-                                label: name.item,
-                                value:name.id,
-                                 data:name
-                                }
-                  
-                            });
-                           }
-                        console.log('data',res);
-                          
-                       
-                           response($.ui.autocomplete.filter(itemsList, request.term));
-                        
-                
-                       }
-                  }); 
-                 
-           }
-      });
-
-
-       }
-
-                
-
        function getId(element) {
         var id,idArr;
         id = element.attr('id');
@@ -206,11 +124,9 @@
         return idArr[idArr.length - 1];
 
        }
-
        function addNewRow(){
         tableBody.append(formHtml());
        }
-
       function deleteRow(){
           var currentEle,rowNo;
           currentEle = $(this);
@@ -218,12 +134,9 @@
           $('#row_'+rowNo).remove();
 
       }
-
        function registerEvent() {
         addBtn.on('click',addNewRow);
         $(document).on('click','.delete_row',deleteRow);
-        $(document).on('focus','.autocomplete_txt',handleAutoComplete);
-      
        }
        
        function init(){
@@ -233,50 +146,99 @@
                init:init
            };
        })();
-   
-       smartAuto.init()
+       smartAuto.init();
+    
+    
+       $(document).on('keyup','.autocomplete_txt',function(){
+        var type = $(this).data('type');
+  
+            if(type =='itemname' )autoType='item_name'; 
+            if(type =='code' )autoType='code'; 
+  
+   $(this).autocomplete({
+       minLength: 0,
+       source: function( request, response ) {
+            $.ajax({
+                url: "{{ URL::to('/searchajax') }}",
+                dataType: "json",
+                data: {
+                    term : request.term,
+                    type : type,
+                },
+                success: function(data) {
+                    var array;
+                    array = [{
+                        label : 'no results',
+                        value : ''
+                    }];
+                    
+                    if (data.length){
+                     array = $.map(data, function (item) {
+                       return {
+                           label: item[autoType],
+                           value: item[autoType],
+                           data : item
+                       }
+                   });
+                }
+                    response(array);
+                }
+            });
+       },
+       select: function( event, ui ) {
+           var data = ui.item.data;           
+           id_arr = $(this).attr('id');
+           id = id_arr.split("_");
+           elementId = id[id.length-1];
+           $('#it_'+elementId).val(data.item_name);
+           $('#code_'+elementId).val(data.code);
+           $('#qty_'+elementId).val(data.qty);
+           $('#unit_'+elementId).val(data.qty);
+           $('#itemid_'+elementId).val(data.id);
+       }
+   });  
 
-            
-       
+    });
+    $(document).on('focus','.autocomplete_client',function(){
+        var type = $(this).data('type');
+  
+  if(type =='clientname' )autoType='client_name'; 
+   $(this).autocomplete({
+       minLength: 0,
+       source: function( request, response ) {
+            $.ajax({
+                url: "{{ URL::to('/searchajaxClient') }}",
+                dataType: "json",
+                data: {
+                    term : request.term,
+                    type : type,
+                },
+                success: function(data) {
+                    var array;
+                    array = [{
+                        label : 'no results',
+                        value : ''
+                    }];
+                    
+                    if (data.length){
+                     array = $.map(data, function (item) {
+                       return {
+                           label: item[autoType],
+                           value: item[autoType],
+                           data : item
+                       }
+                   });
+                }
+                    response(array);
+                }
+            });
+       },select: function( event, ui ) {
+           var data = ui.item.data;           
+           $('#client').val(data.client_name);
+       }
+   });  
 
-
-
-         
-        //search client
-       $('#client_name').autocomplete({
-            source :function(request,response){
-            $.ajax({  
-                       url : '{{URL::to('/search-client')}}',
-                       method:"GET",  
-                       dataType:'json',
-                       data:{
-                           name:request.term
-                       },
-                       success:function(res)  
-                       {  
-                        //   var clientList;
-                        //  notfound = [
-                        //     {
-                        //         label: 'There is no result found for '+request.term,
-                        //         value: ''
-                        //     }
-                        //   ];
-                           if(res.length) {
-                            clientList = $.map(res,function(name){
-                            return {
-                                label: name,
-                                value: name
-                                }
-                            });
-                           }
-                           response($.ui.autocomplete.filter(clientList, request.term));
-                       }  
-                       
-                  }); 
-                 
-           }
-       });
-
-     });
+    });
+});
         </script>
 @endsection

@@ -30,7 +30,7 @@ Route::get('/view-item-by-cat/{category_id}', 'ItemController@show_item_by_categ
 Route::get('/move-item-by-cat/{category_id}', 'ItemController@move_item');
 Route::get('/delete-item-by-cat', 'ItemController@delete_item_by_cat_id');
 Route::post('/update-item-by-cat/{category_id}', 'ItemController@update_item_by_cat');
-Route::get('/search-item', 'ItemController@search_item');
+// Route::get('/search-item', 'ItemController@search_item');
 
 
 //clients routers
@@ -41,7 +41,7 @@ Route::get('/edit-client/{client_id}', 'ClientController@edit_client');
 Route::post('/update-client/{client_id}', 'ClientController@update_client');
 Route::get('/view-client/{client_id}', 'ClientController@show_client');
 Route::get('/delete-client', 'ClientController@delete_client');
-Route::get('/search-client', 'ClientController@search_client');
+Route::get('/searchajaxClient', ['as'=>'searchajaxClient','uses'=>'ClientController@search_client']);
 
 //supplier routers
 Route::get('/add-supplier', 'SupplierController@index');
@@ -55,6 +55,7 @@ Route::get('/delete-supplier', 'SupplierController@delete_supplier');
 //orders routes
 Route::get('/all-orders', 'OrdersController@allOrders');
 Route::get('/add-order', 'OrdersController@index');
+Route::get('/searchajax', ['as'=>'searchajax','uses'=>'OrdersController@searchResponse']);
 Route::post('/save-order', 'OrdersController@store');
 Route::get('/view-order/{order_id}', 'OrdersController@show_order');
 Route::get('/delete-order', 'OrdersController@delete_order');

@@ -94,8 +94,9 @@ class OrdersController extends Controller
                             $data['order_no'] = $request->order_no;
                             $lastId = DB::table('orders')->insertGetId(['order_date'=>$request->order_date,'client_id'=>$current_client,'order_no'=>$request->order_no]);
                            
-
-                            $itemsid = $request->item;
+                            $itemsid = $request->id;
+                            $itemscode = $request->code;
+                            $itemsname = $request->item;
                             $quantities = $request->quantity;
                             $units = $request->unit;
                             $numbers = count( $quantities);
@@ -105,6 +106,7 @@ class OrdersController extends Controller
                                     $ordersData = array(
                                     array('id' => $lastId,
                                     'item_id' =>  $itemsid[$i],
+                                    'code'=>$itemscode[$i],
                                     'quantity' => $quantities[$i],
                                     'unit' =>  $units[$i])
                                     );
@@ -138,5 +140,25 @@ class OrdersController extends Controller
                             ->with('admin.edit-order',$viewed_order);
                     
                         }
+                        public function searchResponse(Request $request){
+                            $query = $request->get('term','');
+                            $items=DB::table('items');
+                            if($request->type =='itemname'){
+                                $items->where('item_name','LIKE','%'.$query.'%');
+                            }
+                            if($request->type =='code'){
+                                $items->where('code','LIKE','%'.$query.'%');
+                            }
+                               $items=$items->get();        
+                            $data=array();
+                            foreach ($items as $item) {
+                                    $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'qty'=>$item->item_initial_qty,'unit'=>$item->item_unit);
+                            }
+                            if(count($data))
+                                 return $data;
+                            else
+                                return ['item_name'=>'','code'=>'','id'=>''];
+                        }
+                    
          
             }
