@@ -15,6 +15,7 @@
 							   @endforeach
 								</tr>
 							</thead>
+					<a href="{{URL::to('/all-orders')}}" class="btn btn-success" style="float:right">Back</a>
 						</table>
 					<hr>
 				<table class="table table-condensed">
@@ -46,7 +47,6 @@
 							<p class="cart_total_price">{{ $totalrow[] = $order->item_price * $order->quantity}} L.E</p>
 								</td>
 						</tr>
-
 					</tbody>
 					@endforeach
 				</table>

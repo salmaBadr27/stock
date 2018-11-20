@@ -62,21 +62,24 @@ class OrdersController extends Controller
 
         public function search_client (Request $request){
             {
-                if($request->ajax()){
-                    $clients=DB::table('client')
-                    ->where('client_name','LIKE','%'.$request->client."%")
-                    ->get();
-                     if($clients){
-                         foreach ($clients as $client) {
-                              $output.= '<li class="clients"><a href="#">'.$client->client_name.'</a></li>';
-                             }
-                            echo $output;
-                            }
-                            else {
-                                $output.='<li><a href="#">no result founds</a></li>';
-                                echo $output;
-                            }
-                        }
+                   $query = $request->get('term','');
+                    $clients=DB::table('client');
+                    if($request->type =='clientname'){
+                        $clients->where('client_name','LIKE','%'.$query.'%');
+                    }
+                    if($request->type =='clientcode'){
+                        $clients->where('code','LIKE','%'.$query.'%');
+                    }
+                    $clients=$clients->get();  
+                    $data=array(); 
+                    foreach ($clients as $client) {
+                        $data[]=array('client_name'=>$client->client_name,'client_code'=>$client->code);
+                }  
+                            if(count($data))
+                            return $data;
+                    else
+                        return ['client_name'=>'','client_code'=>''];
+                        
                     }
                 }
                         public function store (Request $request){
@@ -90,13 +93,13 @@ class OrdersController extends Controller
                             }
                             $data = array();
                             $data['client_id'] =  $current_client;
+                            $data['code'] = $request->client_code;
                             $data['order_date'] = $request->order_date;
                             $data['order_no'] = $request->order_no;
                             $lastId = DB::table('orders')->insertGetId(['order_date'=>$request->order_date,'client_id'=>$current_client,'order_no'=>$request->order_no]);
                            
                             $itemsid = $request->id;
                             $itemscode = $request->code;
-                            $itemsname = $request->item;
                             $quantities = $request->quantity;
                             $units = $request->unit;
                             $numbers = count( $quantities);
@@ -119,23 +122,17 @@ class OrdersController extends Controller
                         }
                         
                         public function edit_order($order_id){
+
                             $single_order = DB::table('orders_item')
                             ->join('orders','orders.order_id','=','orders_item.id')
                             ->join('items','orders_item.item_id','=','items.item_id')
-                            ->select('orders.order_id','items.item_name','items.item_price','items.item_unit','orders_item.quantity','orders.order_no','orders.client_id','orders.order_date')
+                            ->join('client','orders.client_id','=','client.client_id')
+                            ->select('orders.order_id','items.item_id','items.item_name','items.code','items.item_unit','orders_item.quantity','orders.client_id','orders.order_date','client.client_name','client.code as client_code')
                             ->where('id',$order_id)
                             ->get();
                             
-                            $orders_info = DB::table('orders')
-                            ->join('client','orders.client_id','=','client.client_id')
-                            ->select('order_date','client.client_name','order_no')
-                            ->where('order_id',$order_id)
-                            ->get();
-                    
                             $viewed_order = view('admin.edit-order')
-                            ->with(['single_order'=> $single_order,
-                                     'orders_info'=>$orders_info
-                                   ]);
+                            ->with('single_order', $single_order);
                             return view ('admin_layout') 
                             ->with('admin.edit-order',$viewed_order);
                     

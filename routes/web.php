@@ -41,7 +41,7 @@ Route::get('/edit-client/{client_id}', 'ClientController@edit_client');
 Route::post('/update-client/{client_id}', 'ClientController@update_client');
 Route::get('/view-client/{client_id}', 'ClientController@show_client');
 Route::get('/delete-client', 'ClientController@delete_client');
-Route::get('/searchajaxClient', ['as'=>'searchajaxClient','uses'=>'ClientController@search_client']);
+Route::get('/searchajaxClient', ['as'=>'searchajaxClient','uses'=>'OrdersController@search_client']);
 
 //supplier routers
 Route::get('/add-supplier', 'SupplierController@index');

@@ -21,11 +21,13 @@
                             </thead>
                             <tr>
                                 <th>Client</th>
+                                <th>Client Code </th>
                                 <th>Date</th>
                                 <th>Order number</th>
                             </tr>
                           <tr> 
                                  <td><input type="search" name="client_name" id="client" data-type="clientname"  class="form-control autocomplete_client" required/></td>  
+                                 <td><input type="search" name="client_code" id="clientscode" data-type="clientcode"  class="form-control autocomplete_client" required/></td>  
                                  <td><input type="text" id="date" name="order_date" class="form-control"/></td>  
                                  <td><input type="number" name="order_no" class="form-control"/></td>  
                           </tr>  
@@ -35,7 +37,6 @@
                                 <thead>
                                         <th>#</th>
                                         <th>code</th>
-
                                         <th>item</th>
                                         <th>Quantity</th>
                                         <th>Unit</th>
@@ -46,9 +47,9 @@
                                     <th id="delete_1" class="delete_row"><img src="../../../minus.png" style="width:25px;height:25px"/></th>
                                     <td><input type="text" name="code[]" id="code_1" data-type="code" class="form-control autocomplete_txt" value="" required/></td>  
                                     <td><input type="text" name="item[]" id="it_1" data-type="itemname" class="form-control autocomplete_txt"   value="" required/></td>  
-                                    <td><input type="number" name="quantity[]" id="qty_1" data-type="qty" class="form-control autocomplete_txt" required/></td>  
+                                    <td><input type="number" name="quantity[]" id="qty_1" data-type="qty" class="form-control" required/></td>  
                                     <td>  
-                                        <select name="unit[]"  id="unit_1" class ="form-control autocomplete_txt" data-type="unitname" required>
+                                        <select name="unit[]"  id="unit_1" class ="form-control" data-type="unitname" required>
                                             <option></option>
                                             <option>kg</option>
                                             <option>كرتونه</option>
@@ -78,9 +79,10 @@
               var year = date.getFullYear();
               var today = year+'-'+month+'-'+day;
             
-            // date 
+            // default values
              $('#date').val(today);
              $('#client').val('cash');
+             $('#clientscode').val('500');
 
 
              //remove all rows 
@@ -193,7 +195,7 @@
            $('#it_'+elementId).val(data.item_name);
            $('#code_'+elementId).val(data.code);
            $('#qty_'+elementId).val(data.qty);
-           $('#unit_'+elementId).val(data.qty);
+           $('#unit_'+elementId).val(data.unit);
            $('#itemid_'+elementId).val(data.id);
        }
    });  
@@ -203,6 +205,7 @@
         var type = $(this).data('type');
   
   if(type =='clientname' )autoType='client_name'; 
+  if(type =='clientcode' )autoType='client_code';
    $(this).autocomplete({
        minLength: 0,
        source: function( request, response ) {
@@ -214,6 +217,7 @@
                     type : type,
                 },
                 success: function(data) {
+                    console.log(data);
                     var array;
                     array = [{
                         label : 'no results',
@@ -235,6 +239,7 @@
        },select: function( event, ui ) {
            var data = ui.item.data;           
            $('#client').val(data.client_name);
+           $('#clientscode').val(data.client_code);
        }
    });  
 

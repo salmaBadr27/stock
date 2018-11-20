@@ -80,23 +80,5 @@ class ClientController extends Controller
                  return Redirect::to('/all-client');
                 }
 
-                 public function search_client(Request $request)
-                 {
-                    $query = $request->get('term','');
-                    $clients=DB::table('client');
-                    if($request->type =='clientname'){
-                        $clients->where('client_name','LIKE','%'.$query.'%');
-                    }
-                  
-                    $clients=$clients->get();        
-                    $data=array();
-                    foreach ($clients as $client) {
-                            $data[]=array('client_name'=>$client->client_name);
-                    }
-                    if(count($data))
-                         return $data;
-                    else
-                        return ['client_name'=>''];
-                    }
                 
                 }
