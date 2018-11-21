@@ -61,6 +61,21 @@ Route::get('/view-order/{order_id}', 'OrdersController@show_order');
 Route::get('/delete-order', 'OrdersController@delete_order');
 Route::get('/search', 'OrdersController@search_client');
 Route::get('/edit-order/{order_id}', 'OrdersController@edit_order');
+Route::post('/update-order/{order_id}', 'OrdersController@update_order');
+
+
+
+
+//purchases routes
+ Route::get('/all-purchase', 'PurchasesController@allpurchases');
+ Route::get('/add-purchase', 'PurchasesController@index');
+ Route::get('/searchajax', ['as'=>'searchajax','uses'=>'PurchasesController@searchResponse']);
+ Route::get('/searchajaxSupplier', ['as'=>'searchajaxSupplier','uses'=>'PurchasesController@search_supplier']);
+ Route::post('/save-purchase', 'purchasesController@store');
+ Route::get('/view-purchase/{purchase_id}', 'PurchasesController@show_purchase');
+ Route::get('/delete-purchase', 'PurchasesController@delete_purchase');
+ Route::get('/edit-purchase/{purchase_id}', 'PurchasesController@edit_purchase');
+ Route::post('/update-purchase/{purchase_id}', 'PurchasesController@update_purchase');
 
 
 //category routes

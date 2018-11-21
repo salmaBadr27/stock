@@ -1,32 +1,32 @@
 @extends('admin_layout')
 @section('content')
-	<section id="cart_orders">
+	<section id="cart_purchases">
 		<div class="container col-sm-12">
 			<div class="table-responsive cart_info">
-				@if(count($single_order))
-				@foreach( $single_order as $order)
-				<p hidden> {{$id = $order->order_id}}</p>
+				@if(count($single_purchase))
+				@foreach( $single_purchase as $purchase)
+				<p hidden> {{$id = $purchase->purchase_id}}</p>
 				@endforeach
-					<a href="{{URL::to('/all-orders')}}" class="btn btn-success" style="float:right">Back</a>
-					<form method="post" action = {{URL::to('/update-order/'.$id)}} name="update_order" id="update_order">
+					<a href="{{URL::to('/all-purchase')}}" class="btn btn-success" style="float:right">Back</a>
+					<form method="post" action = {{URL::to('/update-purchase/'.$id)}} name="update_purchase" id="update_purchase">
 						{{csrf_field()}} 
 					<table class="table table-condensed">
 							<thead>
 								<tr>
 									
-							<th>Client</th>
-							<th>Client Code </th>
+							<th>Supplier</th>
+							<th>Supplier Code </th>
 							<th>Date</th>
 								</tr>
 								</thead>
 								<tbody>
-							<td><input id ="client" name ="client_name" type=" text" data-type="clientname" class= "form-control autocomplete_client" value="{{$single_order[0]->client_name}}"/></td>
-							<td><input id ="client_code" name ="client_code" type="number" data-type="clientcode"  class= "form-control autocomplete_client" value="{{$single_order[0]->client_code}}"/></td>
-							<td><input type="date"  name ="order_date" class= "form-control" value="{{$single_order[0]->order_date}}"/></td>
+							<td><input id ="supplier" name ="supplier_name" type=" text" data-type="suppliername" class= "form-control autocomplete_supplier" value="{{$single_purchase[0]->supplier_name}}"/></td>
+							<td><input id ="supplier_code" name ="supplier_code" type="number" data-type="suppliercode"  class= "form-control autocomplete_supplier" value="{{$single_purchase[0]->supplier_code}}"/></td>
+							<td><input type="date"  name ="purchase_date" class= "form-control" value="{{$single_purchase[0]->purchase_date}}"/></td>
 								</tbody>
 						</table>
 					<hr>
-				<table  class="table table-bordered" id="autocomplete_table">
+				<table  class="table table-bpurchaseed" id="autocomplete_table">
 					<thead>
 						<tr>
 						   <td class="name"><b>#</b></td>
@@ -37,22 +37,22 @@
 						</tr>
 					</thead>
 					<tbody>
-							@foreach($single_order as $key=>$order)
+							@foreach($single_purchase as $key=>$purchase)
 						<tr id ="row_{{$key}}">
-						<input type="hidden" name ="order_id"  value="{{$order->order_id}}" />	
-						<input type="hidden" name ="id[]" id="itemid_{{$key}}" value="{{$order->item_id}}" />
+						<input type="hidden" name ="purchase_id"  value="{{$purchase->purchase_id}}" />	
+						<input type="hidden" name ="id[]" id="itemid_{{$key}}" value="{{$purchase->item_id}}" />
 						   <th id="delete_{{$key}}" class="delete_row"><img src="../../../minus.png" style="width:25px;height:25px"/></th>
 						   <td class="cart_description">
-						   <input class="form-control"  name="code[]" id="code_{{$key}}" data-type="code"  class="form-control autocomplete_txt" value="{{$order->code}}"/>
+						   <input class="form-control"  name="code[]" id="code_{{$key}}" data-type="code"  class="form-control autocomplete_txt" value="{{$purchase->code}}"/>
 							</td>
 							<td class="cart_product">
-                                <input class="form-control" name="item[]" id="it_{{$key}}" data-type="itemname"  class="form-control autocomplete_txt" value="{{$order->item_name}}"/>
+                                <input class="form-control" name="item[]" id="it_{{$key}}" data-type="itemname"  class="form-control autocomplete_txt" value="{{$purchase->item_name}}"/>
 							</td>
 							<td class="cart_total">
-								<input class="form-control" name="quantity[]" id="qty_{{$key}}" data-type="qty"  value="{{$order->quantity}}"/>
+								<input class="form-control" name="quantity[]" id="qty_{{$key}}" data-type="qty"  value="{{$purchase->quantity}}"/>
 							</td>
 							<td>  
-									<select name="unit[]"  id="unit_{{$key}}}" class ="form-control" data-type="unitname"  value="{{$order->item_unit}}">required>
+									<select name="unit[]"  id="unit_{{$key}}}" class ="form-control" data-type="unitname"  value="{{$purchase->item_unit}}">required>
 										<option>kg</option>
 										<option>كرتونه</option>
 									 </select>
@@ -66,8 +66,8 @@
 				</table>
 				@endif
 				<div class="form-actions" style="float:right">
-						<button type="submit" class="btn btn-primary">Update order </button>
-				<a type="reset" class="btn btn-default" href="{{URL::to('/all-orders')}}">Cancel</a>
+						<button type="submit" class="btn btn-primary">Update purchase </button>
+				<a type="reset" class="btn btn-default" href="{{URL::to('/all-purchase')}}">Cancel</a>
 					  </div>
 					</form>
 			</div>
@@ -76,17 +76,17 @@
 	<script>
 	$(document).ready(function(){
 
-		//autocomplete clients fields
-		$(document).on('focus','.autocomplete_client',function(){
+		//autocomplete suppliers fields
+		$(document).on('focus','.autocomplete_supplier',function(){
         var type = $(this).data('type');
   
-  if(type =='clientname' )autoType='client_name'; 
-  if(type =='clientcode' )autoType='client_code';
+  if(type =='suppliername' )autoType='supplier_name'; 
+  if(type =='suppliercode' )autoType='supplier_code';
    $(this).autocomplete({
        minLength: 0,
        source: function( request, response ) {
             $.ajax({
-                url: "{{ URL::to('/searchajaxClient') }}",
+                url: "{{ URL::to('/searchajaxsupplier') }}",
                 dataType: "json",
                 data: {
                     term : request.term,
@@ -114,8 +114,8 @@
             });
        },select: function( event, ui ) {
            var data = ui.item.data;           
-           $('#client').val(data.client_name);
-           $('#client_code').val(data.client_code);
+           $('#supplier').val(data.supplier_name);
+           $('#supplier_code').val(data.supplier_code);
        }
    });  
 
@@ -231,43 +231,5 @@
 
     });
 });
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	</script>
 @endsection

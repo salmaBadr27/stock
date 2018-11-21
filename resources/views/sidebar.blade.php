@@ -22,9 +22,9 @@
                     <a href="#"><i class="fa fa-sitemap fa-2x"></i>Purchases<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">New Purchase</a>
+                            <a href="{{URL::to('/add-purchase')}}">New Purchase</a>
                             <li>
-                                <a href="#">All Purchases</a>
+                                <a href="{{URL::to('/all-purchase')}}">All Purchases</a>
                             </li>
                         </li>
                             </ul>

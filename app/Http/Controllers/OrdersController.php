@@ -24,7 +24,6 @@ class OrdersController extends Controller
         ->with('all_orders',$all_orders);
         return view ('admin_layout')->with('admin.all-order',$manage_orders);
 
-
     }
 
     public function show_order ($order_id){
@@ -137,6 +136,56 @@ class OrdersController extends Controller
                             ->with('admin.edit-order',$viewed_order);
                     
                         }
+                        public function update_order (Request $request){
+
+                            //order id
+                            $order_id = $request->order_id;
+                            //insert client info and date and order number
+                            $client_id = DB::table('client')
+                            ->where('client_name', $request->client_name)
+                             ->get();
+                            foreach ($client_id as $id) {
+                            $current_client = $id->client_id;
+                            }
+                            $data = array();
+                            $data['client_id'] =  $current_client;
+                            $data['order_date'] = $request->order_date;
+                            DB::table('orders')
+                            ->where('order_id', $order_id)
+                            ->update($data);
+
+                           DB::table('orders_item')
+                           ->where('id',  $order_id)
+                           ->delete();
+
+
+                            $itemsid = $request->id;
+                            $itemscode = $request->code;
+                            $quantities = $request->quantity;
+                            $units = $request->unit;
+                            $numbers = count( $quantities);
+                                   
+                                    if($numbers>0){
+                                    for($i=0; $i<$numbers; $i++){
+                                    $ordersData = array(
+                                    array(
+                                    'id'=>$order_id,
+                                    'item_id' =>  $itemsid[$i],
+                                    'code' =>  $itemscode[$i],
+                                    'quantity' => $quantities[$i],
+                                    'unit' => $units[$i]
+                                    )
+                                    );
+                                    DB::table('orders_item')
+                                    ->insert( $ordersData );
+                                    }
+                                  
+                                }
+                            
+                            Session::put('success','order edited succefully');
+                            return Redirect::to('/add-order');
+                        }
+                        
                         public function searchResponse(Request $request){
                             $query = $request->get('term','');
                             $items=DB::table('items');
