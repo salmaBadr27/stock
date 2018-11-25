@@ -83,7 +83,17 @@
                                     </ul>
                                    
                                 </li>
-
+                                <li>
+                                        <a href="#"><i class="fa fa-sitemap fa-2x"></i>Settings<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a href="{{URL::to('/add-unit')}}">Add Unit</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{URL::to('/all-units')}}">All Units</a>
+                                            </li>
+                                                </ul>
+                                            </li>
             </ul>
           </li>  
    

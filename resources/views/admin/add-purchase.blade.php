@@ -13,6 +13,7 @@
               <form name="add_order" id="add_order" method="post" action="{{URL::to('/save-purchase')}}"> 
                 {{csrf_field()}} 
                    <div class="table-responsive"> 
+                    <button type="button" name="add" id="addrow" class="btn btn-info" > Add More <i class="fa fa-plus"></i></button>
                     <button type="button" name="removeall" id="RemoveAll"class="btn btn-danger" style="float:right"> Remove All <i class="fa fa-remove"></i></button>  
                     <br><br>
                     <table class="table table-bordered">
@@ -59,13 +60,10 @@
                             </tbody>
                         </table> 
                     </div>   
-                        <div class="btn btn-container">
-                                <button type="button" name="add" id="addrow" class="btn btn-info" > Add More <i class="fa fa-plus"></i></button>
-                                 </div> 
                         <div class="form-actions" style="float:right">
                                 <button type="submit" class="btn btn-info">Add Purchase</button>
-                                <button type="reset" class="btn">Cancel</button>
-                              </div>
+                                <a type="reset" class="btn btn-default" href="{{URL::to('/all-purchase')}}">Cancel</a>
+                            </div>
                    </div>  
               </form>  
          </div>  
@@ -194,8 +192,6 @@
            elementId = id[id.length-1];
            $('#it_'+elementId).val(data.item_name);
            $('#code_'+elementId).val(data.code);
-           $('#qty_'+elementId).val(data.qty);
-           $('#unit_'+elementId).val(data.unit);
            $('#itemid_'+elementId).val(data.id);
        }
    });  

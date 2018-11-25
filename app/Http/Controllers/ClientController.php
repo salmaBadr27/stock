@@ -18,7 +18,22 @@ class ClientController extends Controller
        
             $data = array();
             $data['client_name'] = $request->client_name;
+            $data['code'] = $request->code;
             $data['client_description'] = $request->client_description;
+            
+            $ifcodeExist = DB::table('client')
+            ->select('code')
+            ->where('code',$request->code)
+            ->get();
+
+            if(count($ifcodeExist)){
+                foreach($ifcodeExist as $code){
+                   if($code->code == $request->code){
+               $code_msg ='client code must be unique';
+               return redirect()->back()->with('danger', $code_msg);
+                   }
+                }
+           }
  
                 DB::table('client')->insert($data);
                 Session::put('message','client added succefully ');
@@ -50,8 +65,22 @@ class ClientController extends Controller
             {
                  $data=array();
                  $data['client_name']=$request->client_name;
-                 $data['client_id']=$request->client_id;
+                 $data['code'] = $request->code;
                  $data['client_description'] = $request->client_description;
+
+                 $ifcodeExist = DB::table('client')
+                 ->select('code')
+                 ->where('code',$request->code)
+                 ->get();
+     
+                 if(count($ifcodeExist)){
+                     foreach($ifcodeExist as $code){
+                        if($code->code == $request->code){
+                    $code_msg ='client code must be unique';
+                    return redirect()->back()->with('danger', $code_msg);
+                        }
+                     }
+                }
             DB::table('client')
             ->where('client_id',$client_id)
             ->update($data);

@@ -183,12 +183,13 @@ class OrdersController extends Controller
                                 }
                             
                             Session::put('success','order edited succefully');
-                            return Redirect::to('/add-order');
+                            return Redirect::to('/all-order');
                         }
                         
                         public function searchResponse(Request $request){
                             $query = $request->get('term','');
                             $items=DB::table('items');
+
                             if($request->type =='itemname'){
                                 $items->where('item_name','LIKE','%'.$query.'%');
                             }
@@ -198,12 +199,12 @@ class OrdersController extends Controller
                                $items=$items->get();        
                             $data=array();
                             foreach ($items as $item) {
-                                    $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'qty'=>$item->item_initial_qty,'unit'=>$item->item_unit);
+                                    $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'unit'=>$item->unit_id);
                             }
                             if(count($data))
                                  return $data;
                             else
-                                return ['item_name'=>'','code'=>'','id'=>''];
+                                return ['item_name'=>'','code'=>'','id'=>'','unit'=>''];
                         }
                     
          

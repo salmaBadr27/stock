@@ -86,7 +86,7 @@ class PurchasesController extends Controller
                            $items=$items->get();        
                         $data=array();
                         foreach ($items as $item) {
-                                $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'qty'=>$item->item_initial_qty,'unit'=>$item->item_unit);
+                                $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id);
                         }
                         if(count($data))
                              return $data;

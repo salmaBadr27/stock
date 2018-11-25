@@ -7,6 +7,7 @@
 					<thead>
 						<tr class="cart_menu">
 							<td class="image">Supplier Name</td>
+							<td class="image">Supplier Code</td>
 							<td class="price">Description</td>
 						</tr>
 					</thead>
@@ -15,6 +16,9 @@
 							<td class="cart_description">
 								<h4>{{$single_supplier->supplier_name}}</h4>
 							</td>
+							<td class="cart_description">
+									<h4>{{$single_supplier->code}}</h4>
+								</td>
 							<td class="cart_price">
 								<p>{{$single_supplier->supplier_description}}</p>
 							</td>

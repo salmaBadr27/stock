@@ -8,6 +8,7 @@
 						
 						<tr class="cart_menu">
 							<td class="image">Client Name</td>
+							<td class="image">Client Code</td>
 							<td class="price">Description</td>
 						</tr>
 					</thead>
@@ -16,6 +17,9 @@
 							<td class="cart_description">
 								<h4>{{$single_client->client_name}}</h4>
 							</td>
+							<td class="cart_description">
+									<h4>{{$single_client->code}}</h4>
+								</td>
 							<td class="cart_price">
 								<p>{{$single_client->client_description}}</p>
 							</td>

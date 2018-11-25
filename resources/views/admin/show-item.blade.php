@@ -8,9 +8,11 @@
 						<tr class="cart_menu">
 							<td class="image">Image</td>
 							<td class="description">Name</td>
+							<td class="description">Code</td>
 							<td class="price">Price</td>
-							<td class="price">Quantity</td>
 							<td class="price">Unit</td>
+							<td class="price">Equal To</td>
+							<td class="price">Part Unit</td>
 						    <td class="quantity">category</td> 
 						</tr>
 					</thead>
@@ -23,15 +25,22 @@
 								<h4>{{$single_item->item_name}}</h4>
 								
 							</td>
+							<td class="cart_description">
+									<h4>{{$single_item->code}}</h4>
+									
+								</td>
 							<td class="cart_price">
 								<p>{{$single_item->item_price}}</p>
 							</td>
 							<td class="cart_total">
-								<p class="cart_total_price">{{$single_item->item_initial_qty}}</p>
-							</td><td class="cart_total">
-								<p class="cart_total_price">{{$single_item->item_unit}}</p>
+								<p class="cart_total_price">{{$single_item->BaseUnit}}</p>
 							</td>
-							
+							<td class="cart_total">
+									<p class="cart_total_price">{{$single_item->to_unit}}</p>
+								</td>
+								<td class="cart_total">
+										<p class="cart_total_price">{{$single_item->PartUnit}}</p>
+									</td>
 							<td class="cart_total">
 								<p class="cart_total_price">{{$single_item->category_name}}</p>
 							</td> 

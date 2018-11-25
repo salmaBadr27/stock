@@ -30,7 +30,7 @@ Route::get('/view-item-by-cat/{category_id}', 'ItemController@show_item_by_categ
 Route::get('/move-item-by-cat/{category_id}', 'ItemController@move_item');
 Route::get('/delete-item-by-cat', 'ItemController@delete_item_by_cat_id');
 Route::post('/update-item-by-cat/{category_id}', 'ItemController@update_item_by_cat');
-// Route::get('/search-item', 'ItemController@search_item');
+
 
 
 //clients routers
@@ -63,7 +63,14 @@ Route::get('/search', 'OrdersController@search_client');
 Route::get('/edit-order/{order_id}', 'OrdersController@edit_order');
 Route::post('/update-order/{order_id}', 'OrdersController@update_order');
 
-
+//units routes
+Route::get('/add-unit', 'UnitsController@index');
+Route::post('/save-unit', 'UnitsController@store');
+Route::get('/delete-unit', 'UnitsController@delete_unit');
+Route::get('/all-units', 'UnitsController@allUnits');
+Route::get('/view-unit/{unit_id}', 'UnitsController@show_unit');
+Route::get('/edit-unit/{unit_id}', 'UnitsController@edit_unit');
+Route::post('/update-unit/{unit_id}', 'UnitsController@update_unit');
 
 
 //purchases routes

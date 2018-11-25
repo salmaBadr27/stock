@@ -13,6 +13,7 @@
               <form name="add_order" id="add_order" method="post" action="{{URL::to('/save-order')}}"> 
                 {{csrf_field()}} 
                    <div class="table-responsive"> 
+                   <button type="button" name="add" id="addrow" class="btn btn-info" > Add More <i class="fa fa-plus"></i></button>
                     <button type="button" name="removeall" id="RemoveAll"class="btn btn-danger" style="float:right"> Remove All <i class="fa fa-remove"></i></button>  
                     <br><br>
                     <table class="table table-bordered">
@@ -47,7 +48,7 @@
                                     <th id="delete_1" class="delete_row"><img src="../../../minus.png" style="width:25px;height:25px"/></th>
                                     <td><input type="text" name="code[]" id="code_1" data-type="code" class="form-control autocomplete_txt" value="" required/></td>  
                                     <td><input type="text" name="item[]" id="it_1" data-type="itemname" class="form-control autocomplete_txt"   value="" required/></td>  
-                                    <td><input type="number" name="quantity[]" id="qty_1" data-type="qty" class="form-control" required/></td>  
+                                    <td><input type="number" min="0" name="quantity[]" id="qty_1" data-type="qty" class="form-control" required/></td>  
                                     <td>  
                                         <select name="unit[]"  id="unit_1" class ="form-control" data-type="unitname" required>
                                             <option></option>
@@ -59,13 +60,11 @@
                             </tbody>
                         </table> 
                     </div>   
-                        <div class="btn btn-container">
-                                <button type="button" name="add" id="addrow" class="btn btn-info" > Add More <i class="fa fa-plus"></i></button>
-                                 </div> 
+                    
                         <div class="form-actions" style="float:right">
                                 <button type="submit" class="btn btn-info">Add Order</button>
-                                <button type="reset" class="btn">Cancel</button>
-                              </div>
+                                <a type="reset" class="btn btn-default" href="{{URL::to('/all-orders')}}">Cancel</a>
+                            </div>
                    </div>  
               </form>  
          </div>  
@@ -106,7 +105,7 @@
         html +='<td><input type="text" name="code[]" id="code_'+rowCount+'" data-type="code" class="form-control autocomplete_txt"   required/></td>';
         html +='<td><input type="text" name="item[]" id="it_'+rowCount+'" data-type="itemname" class="form-control autocomplete_txt"   required/></td>';
 
-        html += '<td><input type="number" name="quantity[]" id="qty_'+rowCount+'" data-type="qty" class="form-control autocomplete_txt" required/></td>';  
+        html += '<td><input type="number" min="0" name="quantity[]" id="qty_'+rowCount+'" data-type="qty" class="form-control autocomplete_txt" required/></td>';  
         html += '<td>'; 
         html +=  '<select name="unit[]"  id="unit_'+rowCount+'" class ="form-control autocomplete_txt" data-type="unitname" required>';
         html +=  '<option></option>';
@@ -168,6 +167,7 @@
                     type : type,
                 },
                 success: function(data) {
+                   
                     var array;
                     array = [{
                         label : 'no results',
@@ -183,6 +183,7 @@
                        }
                    });
                 }
+                console.log(data);
                     response(array);
                 }
             });
@@ -194,9 +195,8 @@
            elementId = id[id.length-1];
            $('#it_'+elementId).val(data.item_name);
            $('#code_'+elementId).val(data.code);
-           $('#qty_'+elementId).val(data.qty);
            $('#unit_'+elementId).val(data.unit);
-           $('#itemid_'+elementId).val(data.id);
+           $('#itemid_'+elementId).val(data.item_id);
        }
    });  
 
@@ -217,7 +217,7 @@
                     type : type,
                 },
                 success: function(data) {
-                    console.log(data);
+                   
                     var array;
                     array = [{
                         label : 'no results',
@@ -233,6 +233,7 @@
                        }
                    });
                 }
+                console.log(data);
                     response(array);
                 }
             });

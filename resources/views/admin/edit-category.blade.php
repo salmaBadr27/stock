@@ -51,7 +51,7 @@
 				</div>
 				<div class="form-actions">
 				  <button type="submit" class="btn btn-primary">update category </button>
-				  <button type="reset" class="btn">Cancel</button>
+				  <a href="{{URL::to('/all-category')}}" class="btn btn-default">Cancel</a>
 				</div>
 			  </fieldset>
 			</form>   

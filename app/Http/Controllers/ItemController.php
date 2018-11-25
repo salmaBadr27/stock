@@ -17,11 +17,28 @@ class ItemController extends Controller
      public function store (Request $request){
             $data = array();
             $data['item_name'] = $request->item_name;
+            $data['code'] = $request->code;
             $data['category_id'] = $request->category_id;
             $data['item_price'] = $request->item_price;
-            $data['item_initial_qty'] = $request->item_quantity;
-            $data['item_unit']=$request->item_unit;
- 
+            $data['unit_id']=$request->unit_id;
+            $data['to_unit']=$request->to_unit;
+            $data['part_unit_id']=$request->part_unit_id;
+
+           //validate if code is unique
+            $ifcodeExist = DB::table('items')
+            ->select('code')
+            ->where('code',$request->code)
+            ->get();
+
+            if(count($ifcodeExist)){
+                foreach($ifcodeExist as $code){
+                   if($code->code == $request->code){
+               $code_msg ='item code must be unique';
+               return redirect()->back()->with('danger', $code_msg);
+                   }
+                }
+           }
+
             //upload item image
            $image = $request->file('item_image'); //return true or false
             if($image){
@@ -47,7 +64,9 @@ class ItemController extends Controller
             
             $all_items = DB::table('items')
             ->join('categories','items.category_id','=','categories.category_id')
-            ->select('items.*','categories.category_name')
+            ->join('units as base','items.unit_id','=','base.id')
+            ->join('units as part','items.part_unit_id','=','part.id')
+            ->select('items.*','categories.category_name','base.id as Base Unit','part.id as Part Unit')
             ->get(); 
             $manage_items = view('admin.all-item')
             ->with('all_items',$all_items);
@@ -76,7 +95,9 @@ class ItemController extends Controller
       
                     $single_item= DB::table('items')
                     ->join('categories','items.category_id','=','categories.category_id')
-                    ->select('items.*','categories.category_name')
+                    ->join('units as base','items.unit_id','=','base.id')
+                    ->join('units as part','items.part_unit_id','=','part.id')
+                    ->select('items.*','categories.category_name','base.id as Base Unit','part.id as Part Unit')
                     ->where('item_id',$item_id)
                     ->first();
                     $edited_item = view('admin.edit-item')
@@ -101,11 +122,27 @@ class ItemController extends Controller
                     {
                          $data=array();
                          $data['item_name']=$request->item_name;
+                         $data['code'] = $request->code;
                          $data['category_id']=$request->category_id;
                          $data['item_price']=$request->item_price;
-                         $data['item_initial_qty']=$request->item_quantity;
-                         $data['item_unit']=$request->item_unit;
+                         $data['unit_id']=$request->unit_id;
+                         $data['to_unit']=$request->to_unit;
+                         $data['part_unit_id']=$request->part_unit_id;
 
+                         $ifcodeExist = DB::table('items')
+                         ->select('code')
+                         ->where('code',$request->code)
+                         ->get();
+
+                         if(count($ifcodeExist)){
+                             foreach($ifcodeExist as $code){
+                                if($code->code == $request->code){
+                            $code_msg ='item code must be unique';
+                            return redirect()->back()->with('danger', $code_msg);
+                                }
+                             }
+                        }
+                        
                         $image=$request->file('item_image');
                     if ($image) {
                        $image_name=str_random(20);
@@ -119,8 +156,7 @@ class ItemController extends Controller
                             DB::table('items')
                             ->where('item_id',$item_id)
                             ->update($data);
-                            Session::put('message','item updated successfully!!');
-                            return Redirect::to('/all-item');
+                            return Redirect::to('/all-item')->with('msg','item updated successfully!!');
                        }
                     }
                     DB::table('items')
@@ -143,7 +179,9 @@ class ItemController extends Controller
 
                         $single_item= DB::table('items')
                         ->join('categories','items.category_id','=','categories.category_id')
-                        ->select('items.*','categories.category_name')
+                        ->join('units as base','items.unit_id','=','base.id')
+                        ->join('units as part','items.part_unit_id','=','part.id')
+                        ->select('items.*','categories.category_name','base.unit_name as BaseUnit','part.unit_name as PartUnit')
                         ->where('item_id',$item_id)
                         ->first();
                         $viewed_item = view('admin.show-item')

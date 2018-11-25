@@ -18,7 +18,22 @@ class SupplierController extends Controller
        
         $data = array();
         $data['supplier_name'] = $request->supplier_name;
+        $data['code'] = $request->code;
         $data['supplier_description'] = $request->supplier_description;
+
+        $ifcodeExist = DB::table('supplier')
+        ->select('code')
+        ->where('code',$request->code)
+        ->get();
+
+        if(count($ifcodeExist)){
+            foreach($ifcodeExist as $code){
+               if($code->code == $request->code){
+           $code_msg ='supplier code must be unique';
+           return redirect()->back()->with('danger', $code_msg);
+               }
+            }
+       }
 
             DB::table('supplier')->insert($data);
             Session::put('message','supplier added succefully ');
@@ -50,14 +65,29 @@ public function all_suppliers (){
         {
              $data=array();
              $data['supplier_name']=$request->supplier_name;
-             $data['supplier_id']=$request->supplier_id;
+             $data['code']=$request->code;
              $data['supplier_description'] = $request->supplier_description;
-        DB::table('supplier')
-        ->where('supplier_id',$supplier_id)
-        ->update($data);
-        Session::put('message','supplier updated successfully!!');
-            return Redirect::to('/all-supplier');
+
+             $ifcodeExist = DB::table('supplier')
+             ->select('code')
+             ->where('code',$request->code)
+             ->get();
+     
+             if(count($ifcodeExist)){
+                 foreach($ifcodeExist as $code){
+                    if($code->code == $request->code){
+                $code_msg ='supplier code must be unique';
+                return redirect()->back()->with('danger', $code_msg);
+                    }
+                 }
         }
+
+            DB::table('supplier')
+            ->where('supplier_id',$supplier_id)
+            ->update($data);
+            Session::put('message','supplier updated successfully!!');
+                return Redirect::to('/all-supplier');
+            }
         public function show_supplier ($supplier_id){
 
             $single_supplier= DB::table('supplier')
