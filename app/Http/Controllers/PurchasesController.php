@@ -56,6 +56,24 @@ class PurchasesController extends Controller
                         $itemscode = $request->code;
                         $quantities = $request->quantity;
                         $units = $request->unit;
+
+                        foreach($itemsid as $index => $id){
+                            $result = DB::table('items')
+                            ->where('item_id',$id)
+                            ->first();
+                        }
+
+                        $baseUnit = array();
+                        foreach($units as $index => $unit_id ){
+                            if( $unit_id == $result->unit_id){
+                                $baseUnit[$index] = $quantities[$index];
+                            }
+                            else{
+                            $baseUnit[$index] = $quantities[$index]/$result->to_unit;
+                                
+                            }
+                        }
+
                         $numbers = count( $quantities);
                                if($lastId){
                                 if($numbers>0){
@@ -76,7 +94,11 @@ class PurchasesController extends Controller
                     }
                     public function searchResponse(Request $request){
                         $query = $request->get('term','');
-                        $items=DB::table('items');
+                        $items=DB::table('items')
+                        ->join('units as base','items.unit_id','=','base.id')
+                        ->join('units as part','items.part_unit_id','=','part.id')
+                        ->select('items.*','base.unit_name as Base','part.unit_name as Part');
+
                         if($request->type =='itemname'){
                             $items->where('item_name','LIKE','%'.$query.'%');
                         }
@@ -86,13 +108,14 @@ class PurchasesController extends Controller
                            $items=$items->get();        
                         $data=array();
                         foreach ($items as $item) {
-                                $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id);
+                            $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'units'=>['base'=>$item->Base,'part'=>$item->Part,'baseId'=>$item->unit_id,'partId'=>$item->part_unit_id]);
                         }
                         if(count($data))
                              return $data;
                         else
-                            return ['item_name'=>'','code'=>'','id'=>''];
+                                return ['item_name'=>'','code'=>'','id'=>'','units'=>''];
                     }
+
                     public function allPurchases () {
                         $all_purchases = DB::table('purchases')
                         ->join('supplier','purchases.supplier_id','=','supplier.supplier_id')

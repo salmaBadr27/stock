@@ -50,12 +50,11 @@
                                     <td><input type="text" name="item[]" id="it_1" data-type="itemname" class="form-control autocomplete_txt"   value="" required/></td>  
                                     <td><input type="number" name="quantity[]" id="qty_1" data-type="qty" class="form-control" required/></td>  
                                     <td>  
-                                        <select name="unit[]"  id="unit_1" class ="form-control" data-type="unitname" required>
-                                            <option></option>
-                                            <option>kg</option>
-                                            <option>كرتونه</option>
-                                         </select>
-                                    </td>  
+                                            <select name="unit[]"  id="unit_1" class="form-control" data-type="unitname" required>
+                                                <option id ="base_1" value="" name="base[]"></option>
+                                                <option id ="part_1" value="" name="part[]"></option>
+                                            </select>
+                                        </td>  
                              </tr>  
                             </tbody>
                         </table> 
@@ -106,10 +105,9 @@
 
         html += '<td><input type="number" name="quantity[]" id="qty_'+rowCount+'" data-type="qty" class="form-control autocomplete_txt" required/></td>';  
         html += '<td>'; 
-        html +=  '<select name="unit[]"  id="unit_'+rowCount+'" class ="form-control autocomplete_txt" data-type="unitname" required>';
-        html +=  '<option></option>';
-        html +=  '<option>kg</option>';
-        html +=  '<option>كرتونه</option>';
+        html +=  '<select name="unit[]"  id="unit_'+rowCount+'" class ="form-control" data-type="unitname" required>';
+        html +=  '<option id = "base_'+rowCount+'" value="" name="base[]"></option>';
+        html +=  '<option id = "part_'+rowCount+'" value="" name="part[]"></option>';
         html +=   '</select>';
         html +=   '</td>';  
         html +=   '</tr>'; 
@@ -159,7 +157,7 @@
        minLength: 0,
        source: function( request, response ) {
             $.ajax({
-                url: "{{ URL::to('/searchajax') }}",
+                url: "{{ URL::to('/searchajaxPurchases') }}",
                 dataType: "json",
                 data: {
                     term : request.term,
@@ -191,8 +189,15 @@
            id = id_arr.split("_");
            elementId = id[id.length-1];
            $('#it_'+elementId).val(data.item_name);
-           $('#code_'+elementId).val(data.code);
            $('#itemid_'+elementId).val(data.id);
+           $('#code_'+elementId).val(data.code);
+           $('#unit_'+elementId+ 'select').val(data.units.base);
+           $('#base_'+elementId).val(data.units.baseId);
+           $('#part_'+elementId).val(data.units.partId);
+            var part = document.getElementById("part_"+elementId);
+            var base = document.getElementById("base_"+elementId);
+            part.innerHTML= data.units.part;
+            base.innerHTML= data.units.base;
        }
    });  
 

@@ -82,7 +82,7 @@ class OrdersController extends Controller
                     }
                 }
                         public function store (Request $request){
-
+                      
                             //insert client info and date and order number
                             $client_id = DB::table('client')
                             ->where('client_name', $request->client_name)
@@ -101,6 +101,24 @@ class OrdersController extends Controller
                             $itemscode = $request->code;
                             $quantities = $request->quantity;
                             $units = $request->unit;
+
+                            foreach($itemsid as $index => $id){
+                                $result = DB::table('items')
+                                ->where('item_id',$id)
+                                ->first();
+                            }
+
+                            $baseUnit = array();
+                            foreach($units as $index => $unit_id ){
+                                if( $unit_id == $result->unit_id){
+                                    $baseUnit[$index] = $quantities[$index];
+                                }
+                                else{
+                                $baseUnit[$index] = $quantities[$index]/$result->to_unit;
+                                    
+                                }
+                            }
+
                             $numbers = count( $quantities);
                                    if($lastId){
                                     if($numbers>0){
@@ -109,8 +127,8 @@ class OrdersController extends Controller
                                     array('id' => $lastId,
                                     'item_id' =>  $itemsid[$i],
                                     'code'=>$itemscode[$i],
-                                    'quantity' => $quantities[$i],
-                                    'unit' =>  $units[$i])
+                                    'quantity' => $baseUnit[$i],
+                                    'unit' => $result->unit_id  )
                                     );
                                     DB::table('orders_item')->insert( $ordersData );
                                     }
@@ -188,7 +206,11 @@ class OrdersController extends Controller
                         
                         public function searchResponse(Request $request){
                             $query = $request->get('term','');
-                            $items=DB::table('items');
+                            $items=DB::table('items')
+                            ->join('units as base','items.unit_id','=','base.id')
+                            ->join('units as part','items.part_unit_id','=','part.id')
+                            ->select('items.*','base.unit_name as Base','part.unit_name as Part');
+
 
                             if($request->type =='itemname'){
                                 $items->where('item_name','LIKE','%'.$query.'%');
@@ -196,10 +218,11 @@ class OrdersController extends Controller
                             if($request->type =='code'){
                                 $items->where('code','LIKE','%'.$query.'%');
                             }
-                               $items=$items->get();        
+                            
+                            $items=$items->get();        
                             $data=array();
                             foreach ($items as $item) {
-                                    $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'unit'=>$item->unit_id);
+                                    $data[]=array('item_name'=>$item->item_name,'code'=>$item->code,'id'=>$item->item_id,'units'=>['base'=>$item->Base,'part'=>$item->Part,'baseId'=>$item->unit_id,'partId'=>$item->part_unit_id]);
                             }
                             if(count($data))
                                  return $data;

@@ -48,13 +48,12 @@
                                     <th id="delete_1" class="delete_row"><img src="../../../minus.png" style="width:25px;height:25px"/></th>
                                     <td><input type="text" name="code[]" id="code_1" data-type="code" class="form-control autocomplete_txt" value="" required/></td>  
                                     <td><input type="text" name="item[]" id="it_1" data-type="itemname" class="form-control autocomplete_txt"   value="" required/></td>  
-                                    <td><input type="number" min="0" name="quantity[]" id="qty_1" data-type="qty" class="form-control" required/></td>  
+                                    <td><input type="number" min="0" step="0.01" name="quantity[]" id="qty_1" data-type="qty" class="form-control" required/></td>  
                                     <td>  
-                                        <select name="unit[]"  id="unit_1" class ="form-control" data-type="unitname" required>
-                                            <option></option>
-                                            <option>kg</option>
-                                            <option>كرتونه</option>
-                                         </select>
+                                        <select name="unit[]"  id="unit_1" class="form-control" data-type="unitname" required>
+                                            <option id ="base_1" value="" name="base[]"></option>
+                                            <option id ="part_1" value="" name="part[]"></option>
+                                        </select>
                                     </td>  
                              </tr>  
                             </tbody>
@@ -105,12 +104,11 @@
         html +='<td><input type="text" name="code[]" id="code_'+rowCount+'" data-type="code" class="form-control autocomplete_txt"   required/></td>';
         html +='<td><input type="text" name="item[]" id="it_'+rowCount+'" data-type="itemname" class="form-control autocomplete_txt"   required/></td>';
 
-        html += '<td><input type="number" min="0" name="quantity[]" id="qty_'+rowCount+'" data-type="qty" class="form-control autocomplete_txt" required/></td>';  
+        html += '<td><input type="number" min="0" name="quantity[]" id="qty_'+rowCount+'" data-type="qty" class="form-control" required/></td>';  
         html += '<td>'; 
-        html +=  '<select name="unit[]"  id="unit_'+rowCount+'" class ="form-control autocomplete_txt" data-type="unitname" required>';
-        html +=  '<option></option>';
-        html +=  '<option>kg</option>';
-        html +=  '<option>كرتونه</option>';
+        html +=  '<select name="unit[]"  id="unit_'+rowCount+'" class ="form-control" data-type="unitname" required>';
+        html +=  '<option id = "base_'+rowCount+'" value="" name="base[]"></option>';
+        html +=  '<option id = "part_'+rowCount+'" value="" name="part[]"></option>';
         html +=   '</select>';
         html +=   '</td>';  
         html +=   '</tr>'; 
@@ -150,7 +148,7 @@
        smartAuto.init();
     
     
-       $(document).on('keyup','.autocomplete_txt',function(){
+       $(document).on('focus','.autocomplete_txt',function(){
         var type = $(this).data('type');
   
             if(type =='itemname' )autoType='item_name'; 
@@ -160,7 +158,7 @@
        minLength: 0,
        source: function( request, response ) {
             $.ajax({
-                url: "{{ URL::to('/searchajax') }}",
+                url: "{{ URL::to('/searchajaxOrders') }}",
                 dataType: "json",
                 data: {
                     term : request.term,
@@ -184,6 +182,7 @@
                    });
                 }
                 console.log(data);
+                console.log(data[0].units.base);
                     response(array);
                 }
             });
@@ -194,9 +193,17 @@
            id = id_arr.split("_");
            elementId = id[id.length-1];
            $('#it_'+elementId).val(data.item_name);
+           $('#itemid_'+elementId).val(data.id);
            $('#code_'+elementId).val(data.code);
-           $('#unit_'+elementId).val(data.unit);
-           $('#itemid_'+elementId).val(data.item_id);
+           $('#unit_'+elementId+ 'select').val(data.units.base);
+           $('#base_'+elementId).val(data.units.baseId);
+           $('#part_'+elementId).val(data.units.partId);
+            var part = document.getElementById("part_"+elementId);
+            var base = document.getElementById("base_"+elementId);
+            part.innerHTML= data.units.part;
+            base.innerHTML= data.units.base;
+
+
        }
    });  
 
